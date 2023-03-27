@@ -5,17 +5,6 @@
 #include <iostream>
 #include <utility>
 
-// We assume that Python with statement maps directly to constructor and destructo pair
-//
-// Python code:
-//   with open('foo') as f:
-//      f.write('bar')
-//
-// Should be equavilent to following C++ code:
-//   {
-//     contextlib::with f = open("foo");
-//     f->write("bar");
-//   }
 namespace contextlib
 {
 	template<typename T>
@@ -90,7 +79,7 @@ namespace contextlib
 				Destructor(Destructor const&) = delete;
 				Destructor(Destructor &&d) : exception(std::exchange(d.exception, nullptr)) {}
 
-				void operator*()
+				~Destructor()
 				{
 					if (exception) {
 						std::rethrow_exception(exception);
